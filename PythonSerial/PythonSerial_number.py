@@ -45,7 +45,7 @@ def send(x,y):
     message[7] = single
     for i in range(8):
         #print(message[i])
-        ser.write(message[i])
+        ser.write(str(message[i]))
         sleep(0.01)
 
 
@@ -56,14 +56,11 @@ def PID (x_pix, y_pix):
     send(x_power, y_power)
 
 if __name__ == "__main__":
-    arduinoport = 'COM3'
+    arduinoport = '/dev/ttyACM0'
     ser = Serial(arduinoport, 9600)
     sleep(5)
     send(510,-320)
     for i in range(8):
         sleep(0.01)
-        print("hello?")
-        #import pdb; pdb.set_trace()
-        print(ser.read(8))
-        print("helloworld")
-print("hello_")
+        print(ser.read(1))
+        
