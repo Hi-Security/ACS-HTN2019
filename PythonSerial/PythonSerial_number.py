@@ -1,6 +1,7 @@
-import serial
+from serial import Serial
+import io
 
-import time
+from time import sleep
 
 y_cons = 1.8
 x_cons = 1.8
@@ -45,6 +46,9 @@ def send(x,y):
     for i in range(8):
         #print(message[i])
         ser.write(message[i])
+        sleep(0.01)
+
+
 
 def PID (x_pix, y_pix):
     x_power = x_pix * x_cons
@@ -52,6 +56,14 @@ def PID (x_pix, y_pix):
     send(x_power, y_power)
 
 if __name__ == "__main__":
-    arduinoport = 'com3'
-    ser = serial.Serial(arduinoport, 9600)
+    arduinoport = 'COM3'
+    ser = Serial(arduinoport, 9600)
+    sleep(5)
     send(510,-320)
+    for i in range(8):
+        sleep(0.01)
+        print("hello?")
+        #import pdb; pdb.set_trace()
+        print(ser.read(8))
+        print("helloworld")
+print("hello_")
