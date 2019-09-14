@@ -3,7 +3,7 @@
 const float STEPS_PER_REV = 32;
 const float GEAR_REDUCTION =  64; //need to check the gear revolution
 const float STEPS_PER_OUT_REV = STEPS_PER_REV * GEAR_REDUCTION;
-int StepsRequired;
+int StepsRequired=5;
 int side_power=0;
 int top_power=0;
 
@@ -59,7 +59,15 @@ void loop() {
     }
     top_power = top_power*10;
     side_power = side_power*10;
-    
+    stepperX.setSpeed(side_power);
+    stepperY.setSpeed(top_power);
+    stepperX.step(StepsRequired);
+    stepperY.step(StepsRequired);
 
   }
+    stepperX.setSpeed(side_power);
+    stepperY.setSpeed(top_power);
+    stepperX.step(StepsRequired);
+    stepperY.step(StepsRequired);
+    delay(50);
 }
