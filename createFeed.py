@@ -2,9 +2,9 @@ import cv2
 import pickle
 import datetime
 import numpy as np
-from imutils.video import VideoStream
+from imutils.object_detection import non_max_suppression
 import imutils
-import os
+
 
 class image_processor:
 
@@ -17,15 +17,28 @@ class image_processor:
         # loads the custom created face recognizer into this variable
         self.recognizer = pickle.loads(open("output/recognizer.pickle", "rb").read())
         self.label_encode = pickle.loads(open("output/le.pickle", "rb").read())
+        self.Xerror = 0
+        self.Yerror = 0
 
     # cam = cv2.VideoCapture(0)
     # cam.set(cv2.CAP_PROP_FRAME_WIDTH,960)
     # cam.set(cv2.CAP_PROP_FRAME_HEIGHT,720)
 
-    def findFaces(self,frame):
+    def getCurrError(self):
+        return self.Xerror, self.Yerror
+
+    def predictCenter(self, x1, y1, x2, y2, frame):
+        xpred = int(x1 + (x2 - x1) / 2)
+        ypred = int(y2 + (y2 - y1) * 2.5)
+        if ypred > frame.shape[0]:
+            ypred = frame.shape[0]
+        return (xpred, ypred)
+
+    def findFaces(self, frame):
         # ret, frame = cam.read()
         timeinfo = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cv2.putText(frame, timeinfo, (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), thickness=2)
+        cv2.circle(frame, (int(frame.shape[1] / 2), int(frame.shape[0] / 2)), 4, (255, 0, 0), thickness=2)
 
         try:
             frame = imutils.resize(frame, width=600)
@@ -34,17 +47,24 @@ class image_processor:
             exit(0)
         h, w = frame.shape[:2]
         if frame.size == 0:
-            return np.zeros(640,480)
+            return np.zeros(640, 480)
         imageBlob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 1.0, (300, 300),
-                                        (104.0, 177.0, 123.0), swapRB=False, crop=False)
+                                          (104.0, 177.0, 123.0), swapRB=False, crop=False)
         self.detector.setInput(imageBlob)
         detections = self.detector.forward()
-        #
+
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if (confidence >= 0.4):
                 roi = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 x1, y1, x2, y2 = roi.astype('int')
+                (xcent, ycent) = self.predictCenter(x1, y1, x2, y2, frame)
+                cv2.circle(frame, (xcent, ycent), 10, (0, 0, 255), thickness=5)
+
+                # update error
+                self.Xerror = xcent - int(frame.shape[1]/2)
+                self.Yerror = ycent - int(frame.shape[0]/2)
+
 
                 detected_face = frame[y1:y2, x1:x2]
                 face_height = abs(y1 - y2)
@@ -54,7 +74,7 @@ class image_processor:
                     continue
                 try:
                     faceBlob = cv2.dnn.blobFromImage(detected_face, 1.0 / 255, (96, 96), (0, 0, 0),
-                                                    swapRB=True, crop=False)
+                                                     swapRB=True, crop=False)
                 except:
                     continue
 
@@ -77,16 +97,34 @@ class image_processor:
                 cv2.putText(frame, text, (x1, Ylocation), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
         return frame
-        # if cv2.waitKey(20) == ord('q'):
-        #     break
+
+    # def findBodies(self,frame):
+    #     #     # frame = cv2.resize(frame,(480,360),cv2.INTER_AREA)
+    #     #     gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+    #     #     (rects, weights) = self.hog.detectMultiScale(gray_frame, winStride=(6, 6),
+    #     #             padding = (8, 8), scale = 1.06)
+    #     #
+    #     #
+    #     #     # apply non-maxima suppression to the bounding boxes using a
+    #     #     # fairly large overlap threshold to try to maintain overlapping
+    #     #     # boxes that are still people
+    #     #     rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
+    #     #     pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)
+    #     #
+    #     #     # draw the final bounding boxes
+    #     #     for (xA, yA, xB, yB) in pick:
+    #     #         cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
+    #     #     return frame
+
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     imporcess = image_processor()
 
     while True:
-        ret,frame = cap.read()
+        ret, frame = cap.read()
         frame = imporcess.findFaces(frame)
+        # frame=imporcess.findBodies(frame)
 
-        cv2.imshow("frame",frame)
-        cv2.waitKey(1)
+        cv2.imshow("frame", frame)
+        cv2.waitKey(20)
