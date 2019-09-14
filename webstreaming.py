@@ -27,7 +27,7 @@ app = Flask(__name__)
 # initialize the video stream and allow the camera sensor to
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=2).start()
 
 improcessor = createFeed.image_processor()
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 	ap.add_argument("-f", "--frame-count", type=int, default=32,
 		help="# of frames used to construct the background model")
 	args = vars(ap.parse_args())
-
+	
 	# start a thread that will perform motion detection
 	t = threading.Thread(target=process_video, args=())
 	t.daemon = True
