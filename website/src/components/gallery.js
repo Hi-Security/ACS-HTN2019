@@ -1,50 +1,54 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-// import tileData from './tileData';
+import Gallerys from 'react-photo-gallery';
+import './login.css';
+import styled, { css } from 'styled-components'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
+const Content = styled.div`
+  height: 650px;
+  width: auto;
+  overflow-x: scroll;
+  img {
+    border-radius:10px;
+}
+`;
+
+const images = [
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g0.jpg',
   },
-  gridList: {
-    width: 500,
-    height: 450,
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g1.jpg',
   },
-}));
- 
-const tileData = [
-    {
-        img: 'https://static.spokanecity.org/photos/2015/09/19/infill-housing-option-1/16x10/Full/infill-housing-option-1.jpg',
-        title: 'Image',
-        author: 'author',
-        cols: 2,
-    },
-    {
-        img: 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Image2',
-        author: 'me',
-        cols: 2,
-    }
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g2.jpg',
+  },
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g3.jpg',
+  },
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g4.jpg',
+  },
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g5.jpg',
+  },
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g6.jpg',
+  },
+  {
+    src: 'https://htn2019.blob.core.windows.net/gallery/g7.jpg',
+  },
+  
 ];
 
-export default function ImageGridList() {
-  const classes = useStyles();
+class Gallery extends React.Component {
 
-  return (
-    <div className={classes.root}>
-      <GridList cellHeight={160} className={classes.gridList} cols={3}>
-        {tileData.map(tile => (
-          <GridListTile key={tile.img} cols={tile.cols || 1}>
-            <img src={tile.img} alt={tile.title} />
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
-  );
-}
+ render() {
+   return (
+     <Content>
+       <Gallerys direction={'row'} margin={40} photos={images} />
+     </Content>
+   );
+  }
+ }
+
+ export default Gallery;

@@ -25,3 +25,18 @@ height: auto;
     width: 400px;
     
 }
+
+.transcript {
+    margin-left: 60px;
+    line-height: 2.0;
+}
+
+.react-photo-gallery--gallery div {
+    flex-flow: nowrap !important;
+  }
+  
+.react-photo-gallery--gallery{
+
+    flex-flow: nowrap !important;
+
+}

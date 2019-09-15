@@ -6,7 +6,7 @@ class Stream extends Component {
         return(
             <div className="Stream">
             <h1 className="s">
-                    Stream
+                    Security Cam 1:
             </h1>
             <img src="http://localhost:8000/video_feed"></img>
             </div>

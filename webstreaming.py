@@ -27,7 +27,7 @@ app = Flask(__name__)
 # initialize the video stream and allow the camera sensor to
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src=2).start()
+vs = VideoStream(src=0).start()
 
 improcessor = createFeed.image_processor()
 

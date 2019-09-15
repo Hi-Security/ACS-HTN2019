@@ -9,21 +9,24 @@ class App extends Component {
     return (
       <div className="demo-big-content">
     <Layout>
+    
         <Header className="header-color" title=" " scroll>
+        <img className = "logo" src="https://i.imgur.com/aZkQSkn.png"></img>
             <Navigation>
                 <Link to="/">Home</Link>
-                <Link to="/">Signup</Link>
-                <Link to="/about">About</Link>
-                <Link to="/login"> Login </Link>
+                <Link to="/transcript">Transcript</Link>
                 <Link to="/gallery"> Gallery </Link>
+                <Link to="/">Signup</Link>
+                <Link to="/login"> Login </Link>
             </Navigation>
         </Header>
-        <Drawer title="Contents (or whatever)">
+        
+        <Drawer title="Available Streams">
             <Navigation>
-              <Link to="/">Home</Link>
-              <Link to="/stream">Stream</Link>
-              <Link to="/about">About</Link>
-              <a href="/">Link</a>
+              <Link to="/stream">Stream 1</Link>
+              <Link to="/stream2">Stream 2</Link>
+              <Link to="/">Stream 3</Link>
+              <a href="/">Stream 4</a>
             </Navigation>
         </Drawer>
         <Content>

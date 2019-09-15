@@ -7,14 +7,14 @@ class Landing extends Component {
             <div style={{width: '100%', margin: 'auto'}}>
                 <Grid className="landing-grid" >
                     <Cell col={12}>
-                        <img 
-                            src="http://localhost:8000/video_feed"
+                        {/* <img 
+                            // src="https://static.spokanecity.org/photos/2015/09/19/infill-housing-option-1/16x10/Full/infill-housing-option-1.jpg"
                             alt="some image here"
                             className="CCP-img"
-                        />
+                        /> */}
 
                         <div className="banner-text">
-                            <h1> iSecurity </h1>
+                            <h1> HI - Security </h1>
 
                         <hr/>
 

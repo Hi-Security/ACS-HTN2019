@@ -1,0 +1,11 @@
+{
+    "lines": [
+"I am saying something right now~2019-09-14 12:57:15.870690",
+"I am saying something else right now~2019-09-14 12:57:22.942031",
+"this is the last thing I am saying~2019-09-14 12:57:48.029913",
+"okay let's Travis no~2019-09-14 13:10:46.694571",
+"wait let me see again~2019-09-14 13:10:56.114863",
+"I'm doing text right now images is a different file~2019-09-14 13:11:35.943327",
+"I am saying something~2019-09-14 17:35:53.441502",
+    ]
+}
