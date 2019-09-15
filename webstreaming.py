@@ -49,7 +49,7 @@ def process_video():
 		frame = vs.read()
 		frame = improcessor.findFaces(frame)
 		x, y = improcessor.getCurrError()
-		pid(x, y)
+		controlMotor.pid(x, y)
 		# acquire the lock, set the output frame, and release the
 		# lock
 		with lock:

@@ -42,6 +42,8 @@ class image_processor:
         time = str(datetime.datetime.now().hour) + str(minute)+str(datetime.datetime.now().second)
         cv2.putText(frame, timeinfo, (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), thickness=2)
         orig = frame.copy()
+        self.Xerror = 0
+        self.Yerror = 0
         try:
             cv2.circle(frame, (int(frame.shape[1] / 2), int(frame.shape[0] / 2)), 4, (255, 0, 0), thickness=2)
             frame = imutils.resize(frame, width=600)

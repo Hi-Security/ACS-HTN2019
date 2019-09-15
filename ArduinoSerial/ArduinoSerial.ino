@@ -93,7 +93,7 @@ void loop() {
 
   // serial write section
 
-  char ard_sends = '1';
+  //char ard_sends = '1';
 //  Serial.print("Arduino sends: ");
 //  Serial.println(ard_sends);
 //  Serial.print("\n");
