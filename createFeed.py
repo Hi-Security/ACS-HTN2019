@@ -4,6 +4,7 @@ import datetime
 import numpy as np
 from imutils.object_detection import non_max_suppression
 import imutils
+import os
 
 
 class image_processor:
@@ -19,6 +20,7 @@ class image_processor:
         self.label_encode = pickle.loads(open("output/le.pickle", "rb").read())
         self.Xerror = 0
         self.Yerror = 0
+        self.loggedMinute = [0, 0, 0]
 
     # cam = cv2.VideoCapture(0)
     # cam.set(cv2.CAP_PROP_FRAME_WIDTH,960)
@@ -35,12 +37,13 @@ class image_processor:
         return (xpred, ypred)
 
     def findFaces(self, frame):
-        # ret, frame = cam.read()
         timeinfo = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        minute = datetime.datetime.now().minute
+        time = str(datetime.datetime.now().hour) + str(minute)+str(datetime.datetime.now().second)
         cv2.putText(frame, timeinfo, (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), thickness=2)
-        cv2.circle(frame, (int(frame.shape[1] / 2), int(frame.shape[0] / 2)), 4, (255, 0, 0), thickness=2)
-
+        orig = frame.copy()
         try:
+            cv2.circle(frame, (int(frame.shape[1] / 2), int(frame.shape[0] / 2)), 4, (255, 0, 0), thickness=2)
             frame = imutils.resize(frame, width=600)
         except AttributeError:
             print("no compatible webcam found")
@@ -53,6 +56,8 @@ class image_processor:
         self.detector.setInput(imageBlob)
         detections = self.detector.forward()
 
+        detected_labels = []
+
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if (confidence >= 0.4):
@@ -62,9 +67,8 @@ class image_processor:
                 cv2.circle(frame, (xcent, ycent), 10, (0, 0, 255), thickness=5)
 
                 # update error
-                self.Xerror = xcent - int(frame.shape[1]/2)
-                self.Yerror = ycent - int(frame.shape[0]/2)
-
+                self.Xerror = xcent - int(frame.shape[1] / 2)
+                self.Yerror = ycent - int(frame.shape[0] / 2)
 
                 detected_face = frame[y1:y2, x1:x2]
                 face_height = abs(y1 - y2)
@@ -85,6 +89,13 @@ class image_processor:
                 j = np.argmax(prediction)
                 probaility = prediction[j]
                 name = self.label_encode.classes_[j]
+
+                detected_labels.append(name)
+                if name != "unknown" and self.loggedMinute[j] != datetime.datetime.now().minute:
+                    path = os.path.join("images",time+name+".jpg")
+                    print(path)
+                    cv2.imwrite(path, orig)
+                    self.loggedMinute[j] = minute
 
                 text = "{}: {:.2f}%".format(name, probaility * 100)
 
