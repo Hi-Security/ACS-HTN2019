@@ -18,7 +18,7 @@ void loop(){
   StepsRequired = 4; //this determines how much it will move (maybe keep it as 5 or something)?
   //Right for positive, left for negative
   stepperX.step(StepsRequired);
-  delay(50);
+  delay(5);
   
   
 }

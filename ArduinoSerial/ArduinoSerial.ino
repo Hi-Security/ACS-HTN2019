@@ -1,73 +1,101 @@
 #include <Stepper.h>
 
+
+
 const float STEPS_PER_REV = 32;
 const float GEAR_REDUCTION =  64; //need to check the gear revolution
 const float STEPS_PER_OUT_REV = STEPS_PER_REV * GEAR_REDUCTION;
-int StepsRequired=5;
+int StepsRequiredX = 4;
+int StepsRequiredY = 4;
+//for opposite direction, use -1*StepsRequired
 int side_power=0;
 int top_power=0;
-
+int hundred;
+int ten;
+int single;
+int stepper_X_power = 0;
+int stepper_Y_power = 0;
 Stepper stepperX(STEPS_PER_REV, 8,10,9,11);
 Stepper stepperY(STEPS_PER_REV, 4,6,5,7);
+char power = ' ';
 
+String readString;
 
+void CharParser(String data){
+  if (data[0]=='P'){//positive
+    StepsRequiredX = abs(StepsRequiredX);   
+  }
+  else{
+    StepsRequiredX = abs(StepsRequiredX)*-1;
+  }
+  if(data[4] =='P'){
+    StepsRequiredY = abs(StepsRequiredY);     
+  }
+  else{
+    StepsRequiredY = abs(StepsRequiredY)*-1;     
+  }
+  
+  hundred = data[1] -'0';
+  ten = data[2] -'0';
+  single = data[3] -'0';
+  stepper_X_power = hundred*100+ten*10+single;
+  hundred = data[5] -'0';
+  ten = data[6] -'0';
+  single = data[7] -'0';
+  stepper_Y_power = hundred*100+ten*10+single;
+  driver(stepper_X_power, stepper_Y_power);
+}
 
-
-uint8_t data[8];
-
-void setup() {
-  // put your setup code here, to run once:
-   pinMode(13, OUTPUT);
-   pinMode(2, OUTPUT);
-
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-
+void driver(int X_power, int Y_power){
+  stepperX.setSpeed(X_power);
+  stepperY.setSpeed(Y_power);
+  stepperX.step(StepsRequiredX);
+  stepperY.step(StepsRequiredY);
+  delay(5);
 }
 
 
+void setup() {
+  // put your setup code here, to run once:
+
+  Serial.begin(9600);
+
+
+}
+
 void loop() {
-  digitalWrite(13, LOW);
-
-  if (Serial.available()>7){//only when there are 
-    for (int i = 0; i< 8; i++){
-      data[i]=Serial.read() - '0';
-      delay(10);
-      Serial.print(data[i]);
+ while(!Serial.available()) {}
+  // serial read section
+  while (Serial.available())
+  {
+    if (Serial.available() >0)
+    {
+      char c = Serial.read();  //gets one byte from serial buffer
+      readString += c; //makes the string readString
     }
-
-    
-    if (data[0]==1){
-      //for x
-      if (data[1] ==1){
-        //positive:
-        side_power = data[3]*10+data[4];
-      }
-      else{
-        side_power = -1(data[3]*10+data[4]);
-      }
-    }
-    if(data[4]==2) {
-      //for y
-        if (data[5]==1){//positive
-          top_power = data[6]*10+data[7];
-        }
-        else{
-          top_power = -1*(data[6]*10+data[7]);
-        }
-      
-    }
-    top_power = top_power*10;
-    side_power = side_power*10;
-    stepperX.setSpeed(side_power);
-    stepperY.setSpeed(top_power);
-    stepperX.step(StepsRequired);
-    stepperY.step(StepsRequired);
-
   }
-    stepperX.setSpeed(side_power);
-    stepperY.setSpeed(top_power);
-    stepperX.step(StepsRequired);
-    stepperY.step(StepsRequired);
-    delay(50);
+
+  if (readString.length() >=7)
+  {
+//    Serial.print("Arduino received: ");  
+    Serial.println(readString); //see what was received
+    Serial.flush();
+
+//steven, put your code here
+    CharParser(readString);
+
+
+    readString = "";
+  }
+
+  delay(500);
+
+  // serial write section
+
+  char ard_sends = '1';
+//  Serial.print("Arduino sends: ");
+//  Serial.println(ard_sends);
+//  Serial.print("\n");
+
+  
 }
