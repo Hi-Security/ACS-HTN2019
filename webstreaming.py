@@ -13,6 +13,7 @@ import imutils
 import time
 import cv2
 import createFeed
+import controlMotor
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful for multiple browsers/tabs
@@ -47,7 +48,8 @@ def process_video():
 		# convert the frame to grayscale, and blur it
 		frame = vs.read()
 		frame = improcessor.findFaces(frame)
-
+		x, y = improcessor.getCurrError()
+		pid(x, y)
 		# acquire the lock, set the output frame, and release the
 		# lock
 		with lock:
