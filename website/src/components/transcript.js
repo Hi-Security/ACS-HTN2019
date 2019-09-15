@@ -3,8 +3,8 @@ import './login.css';
 
 export default class transcript extends Component {
     constructor(props) {    super(props)
-    this.file = './words.txt';
-    var currentLines = require("./words.json")
+   
+    var currentLines = require("./../data.json")
     this.state = {time: Date.now(),lines: currentLines.lines  };
 
     console.log(currentLines);

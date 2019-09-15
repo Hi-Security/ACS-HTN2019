@@ -21,11 +21,6 @@ background: linear-gradient(to right, #0052D4, #65C7F7, #9CECFB); /* W3C, IE 10+
 height: auto;
 }
 
-.gallery-grid {
-    width: 400px;
-    
-}
-
 .transcript {
     margin-left: 60px;
     line-height: 2.0;
@@ -39,4 +34,8 @@ height: auto;
 
     flex-flow: nowrap !important;
 
+}
+.galleryButton {
+    text-align: center;
+    margin-top: 250px;
 }
