@@ -59,4 +59,4 @@ def upload_7():
 
 def watch_for_stuff():
     w = Watcher()
-    w.run()
+    w.run
