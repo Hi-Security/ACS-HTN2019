@@ -28,7 +28,7 @@ app = Flask(__name__)
 # initialize the video stream and allow the camera sensor to
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src=1).start()
+vs = VideoStream(src=2).start()
 
 improcessor = createFeed.image_processor()
 
@@ -49,7 +49,8 @@ def process_video():
 		frame = vs.read()
 		frame = improcessor.findFaces(frame)
 		x, y = improcessor.getCurrError()
-		controlMotor.pid(x, y)
+		if x != 0 and y != 0:
+		    controlMotor.pid(-1*x, y)
 		# acquire the lock, set the output frame, and release the
 		# lock
 		with lock:

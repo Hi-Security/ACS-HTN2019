@@ -31,7 +31,7 @@ class image_processor:
 
     def predictCenter(self, x1, y1, x2, y2, frame):
         xpred = int(x1 + (x2 - x1) / 2)
-        ypred = int(y2 + (y2 - y1) * 2.5)
+        ypred = int(y1 + (y2 - y1) )
         if ypred > frame.shape[0]:
             ypred = frame.shape[0]
         return (xpred, ypred)

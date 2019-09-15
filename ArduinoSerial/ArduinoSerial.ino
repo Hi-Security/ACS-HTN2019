@@ -52,7 +52,7 @@ void driver(int X_power, int Y_power){
   stepperX.setSpeed(X_power);
   stepperY.setSpeed(Y_power);
   stepperX.step(StepsRequiredX);
-  stepperY.step(StepsRequiredY);
+  stepperY.step(StepsRequiredY* -1);
 }
 
 
@@ -76,20 +76,21 @@ void loop() {
     }
   }
 
-  if (readString.length() >=7)
+  if (readString.length() >=8)
   {
-//    Serial.print("Arduino received: ");  
-    //Serial.println(readString); //see what was received
-    //Serial.flush();
+//   Serial.print("Arduino received: ");  
+//    Serial.println(readString); //see what was received
+//    Serial.flush();
 
 //steven, put your code here
     CharParser(readString);
+    //CharParser("P100P100");
 
 
     readString = "";
   }
 
-  delay(1);
+  delay(10);
 
   // serial write section
 

@@ -6,14 +6,14 @@ X_CONST = 4
 Y_CONST = 4
 TOLERANCE = 50
 
-port = 'COM3' # note I'm using Mac OS-X
+port = '/dev/ttyACM0' # note I'm using Mac OS-X
 #NOTE: THIS MAY DIFFER FOR COMPUTER
 ard = serial.Serial(port,9600,timeout=5)
 time.sleep(2) # wait for Arduino
 
 
 def pid(x,y):
-    global port, X_CONST, Y_CONST, TOLERANCE
+    global port, X_CONST, Y_CONST, TOLERANCE, ard
     x_power= -1*x*X_CONST
     y_power = -1*y*Y_CONST
     message = ""
@@ -49,19 +49,21 @@ def pid(x,y):
     print("y " + str(y_power))
     print("x " + str(x_power))
     print(message)
+
     #print("Python Message " + message)
     ard.flush()
-    ard.write(str(message).encode())
-
+    ard.write(message.encode())
+    time.sleep(0.04)
+    
 
 
 if __name__== "__main__":
     while (True):
     # Serial write section
-        ard = serial.Serial(port, 9600, timeout=5)
+        #ard = serial.Serial(port, 9600, timeout=5)
         time.sleep(2)  # wait for Arduino
 
-        setTempCar1 = pid(400,-400) #hey steven, update this variable to send
+        setTempCar1 = pid(-40,-40) #hey steven, update this variable to send
         ard.flush()
         setTemp1 = str(setTempCar1)
 
@@ -71,9 +73,9 @@ if __name__== "__main__":
         time.sleep(0.002) # I shortened this to match the new value in your Arduino code
 
         #Serial Read session
-        # msg = ard.read(ard.inWaiting()) # read all characters in buffer
-        #print ("Message from arduino: ")
-        #print (msg.decode())
+        msg = ard.read(ard.inWaiting()) # read all characters in buffer
+        print ("Message from arduino: ")
+        print (msg.decode())
 
 
 else:
