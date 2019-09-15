@@ -5,8 +5,8 @@
 const float STEPS_PER_REV = 32;
 const float GEAR_REDUCTION =  64; //need to check the gear revolution
 const float STEPS_PER_OUT_REV = STEPS_PER_REV * GEAR_REDUCTION;
-int StepsRequiredX = 4;
-int StepsRequiredY = 4;
+int StepsRequiredX = 15;
+int StepsRequiredY = 15;
 //for opposite direction, use -1*StepsRequired
 int side_power=0;
 int top_power=0;
@@ -43,6 +43,8 @@ void CharParser(String data){
   ten = data[6] -'0';
   single = data[7] -'0';
   stepper_Y_power = hundred*100+ten*10+single;
+  //Serial.write(stepper_X_power);
+  //Serial.write(stepper_Y_power);
   driver(stepper_X_power, stepper_Y_power);
 }
 
@@ -51,7 +53,6 @@ void driver(int X_power, int Y_power){
   stepperY.setSpeed(Y_power);
   stepperX.step(StepsRequiredX);
   stepperY.step(StepsRequiredY);
-  delay(5);
 }
 
 
@@ -78,8 +79,8 @@ void loop() {
   if (readString.length() >=7)
   {
 //    Serial.print("Arduino received: ");  
-    Serial.println(readString); //see what was received
-    Serial.flush();
+    //Serial.println(readString); //see what was received
+    //Serial.flush();
 
 //steven, put your code here
     CharParser(readString);
@@ -88,7 +89,7 @@ void loop() {
     readString = "";
   }
 
-  delay(500);
+  delay(1);
 
   // serial write section
 
