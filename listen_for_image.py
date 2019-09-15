@@ -6,6 +6,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from storage import *
 
+j=0
+
 block_blob_service = BlockBlobService(account_name='htn2019', account_key='1jvcfmZQrfPUSZdv8Ofdv3L7047OkmMfY66ZEeYYSf3DFMF+kia/5qzO68UsX8fL4utjCq1iTOUQdHIVdbciTQ==')
 blob_name = "captures"
 n = 7
@@ -33,10 +35,10 @@ class Watcher:
 class Handler(FileSystemEventHandler):
     @staticmethod
     def on_any_event(event):
-        j = 0
         if event.is_directory:
             return None
         elif event.event_type =='created':
+            global j
             if j <= 6:
                 j += 1
             else:
@@ -45,7 +47,7 @@ class Handler(FileSystemEventHandler):
 
             # Take any action here when a file is first created.
             print("Received created event - $s." + str(event.src_path))
-            upload_file(event.src_path, block_blob_service, blob_name, image_name)
+            upload_file(event.src_path, block_blob_service, "gallery", image_name)
             # block_blob_service.get_blob_to_path(blob_name, os.path.basename(event.src_path),
             #                                     os.path.join(os.path.expanduser("~/Pictures/target"), os.path.basename(event.src_path)))
             # print(str(block_blob_service.make_blob_url(blob_name, os.path.basename(event.src_path))))
@@ -59,4 +61,4 @@ def upload_7():
 
 def watch_for_stuff():
     w = Watcher()
-    w.run
+    w.run()
