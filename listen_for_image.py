@@ -56,4 +56,8 @@ class Handler(FileSystemEventHandler):
 
 def watch_for_stuff():
     w = Watcher()
+<<<<<<< HEAD
     w.run()
+=======
+    w.run()
+>>>>>>> origin/develop
